@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
@@ -15,6 +17,7 @@ public class Tecnico extends Pessoa implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore //Nesse caso é para evitar o loop infinito, por causa da Serialização
 	@OneToMany(mappedBy = "tecnico") //Um téncico para muitos chamados, o nome tecnico é o nome do field tecnico, do Tipo Tecnico na classe chamado
 	private List<Chamado> chamados = new ArrayList<>();
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rafael.helpdesk.domain.enums.Perfil;
 
 import jakarta.persistence.Entity;
@@ -16,6 +17,7 @@ public class Cliente extends Pessoa implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@JsonIgnore //Nesse caso é para evitar o loop infinito, por causa da Serialização
 	@OneToMany(mappedBy = "cliente") //Um cliete para muitos chamados, o nome cliente é o nome do field cliente do tipo Cliente na classe chamado
 	private List<Chamado> chamados = new ArrayList<>();
 
