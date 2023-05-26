@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rafael.helpdesk.domain.model.Cliente;
+import com.rafael.helpdesk.domain.model.Pessoa;
 import com.rafael.helpdesk.dtos.ClienteDTO;
 import com.rafael.helpdesk.repositories.ClienteRepository;
+import com.rafael.helpdesk.repositories.PessoaRepository;
+import com.rafael.helpdesk.services.execptions.DataIntegrityViolationException;
 import com.rafael.helpdesk.services.execptions.ObjectNotFoundException;
 
 @Service // permite a implementação de lógica de negócio e regras de processamento de
@@ -17,6 +20,9 @@ public class ClienteService {
 
 	@Autowired
 	ClienteRepository clienteRepository;
+
+	@Autowired
+	PessoaRepository pessoaRepository;
 
 	public Cliente findById(Integer id) {
 		Optional<Cliente> cliente = clienteRepository.findById(id);
@@ -30,8 +36,24 @@ public class ClienteService {
 
 	public Cliente create(ClienteDTO clienteDTO) {
 		clienteDTO.setId(null);
+		validarCpfEEmail(clienteDTO);
+
 		Cliente novoCliente = new Cliente(clienteDTO);
 		return clienteRepository.save(novoCliente);
+	}
+
+	public void validarCpfEEmail(ClienteDTO clienteDTO) {
+		Optional<Pessoa> cliente = pessoaRepository.findByCpf(clienteDTO.getCpf());
+
+		if (cliente.isPresent() && cliente.get().getId() != clienteDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF Já Cadastrado!");
+		}
+
+		cliente = pessoaRepository.findByEmail(clienteDTO.getEmail());
+		if (cliente.isPresent() && cliente.get().getId() != clienteDTO.getId()) {
+			throw new DataIntegrityViolationException("Email Já Cadastrado!");
+		}
+
 	}
 
 }
