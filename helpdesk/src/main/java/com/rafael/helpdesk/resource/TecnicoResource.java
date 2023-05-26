@@ -63,7 +63,7 @@ public class TecnicoResource {
 	 * Java, simplificando o processamento de dados enviados pelo cliente em APIs
 	 * RESTful.
 	 */
-	public ResponseEntity<Tecnico> create(@RequestBody TecnicoDTO tecnicoDTO) {
+	public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoDTO tecnicoDTO) {
 		Tecnico novoTecnico = tecnicoService.create(tecnicoDTO);
 
 		/*
@@ -76,7 +76,7 @@ public class TecnicoResource {
 		 * links corretos de recursos criados recentemente em APIs RESTful. Isso permite
 		 * que os usuários acessem facilmente os recursos criados.
 		 */
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build().toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoTecnico.getId()).toUri();
 
 		/*
 		 * Retorna uma resposta HTTP com o status 201 (Created) e inclui a URI fornecida
