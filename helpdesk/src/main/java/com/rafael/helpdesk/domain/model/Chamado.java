@@ -7,6 +7,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rafael.helpdesk.domain.enums.Prioridade;
 import com.rafael.helpdesk.domain.enums.Status;
+import com.rafael.helpdesk.dtos.ChamadoDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Chamado implements Serializable{
+public class Chamado implements Serializable {
 
 	/**
 	 * 
@@ -25,10 +27,10 @@ public class Chamado implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataAbertura = LocalDate.now();
-	
+
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataFechamento;
 	private Prioridade prioridade;
@@ -37,11 +39,13 @@ public class Chamado implements Serializable{
 	private String observacoes;
 
 	@ManyToOne // Muitos tecnicos para um chamado
-	@JoinColumn(name = "tecnico_id") // Nome da coluna onde vai ter o relacionamento com o tecnico, o field id do tecnico
-	private Tecnico tecnico; 
-	
+	@JoinColumn(name = "tecnico_id") // Nome da coluna onde vai ter o relacionamento com o tecnico, o field id do
+										// tecnico
+	private Tecnico tecnico;
+
 	@ManyToOne // Muitos tecnicos para um chamado
-	@JoinColumn(name = "cliente_id") // Nome da coluna onde vai ter o relacionamento com o cliente, o field id do cliente
+	@JoinColumn(name = "cliente_id") // Nome da coluna onde vai ter o relacionamento com o cliente, o field id do
+										// cliente
 	private Cliente cliente;
 
 	public Chamado() {
@@ -58,6 +62,17 @@ public class Chamado implements Serializable{
 		this.observacoes = observacoes;
 		this.tecnico = tecnico;
 		this.cliente = cliente;
+	}
+
+	public Chamado(ChamadoDTO chamadoDTO) {
+		super();
+		this.id = chamadoDTO.getId();
+		this.prioridade = chamadoDTO.getPrioridade();
+		this.status = chamadoDTO.getStatus();
+		this.titulo = chamadoDTO.getTitulo();
+		this.observacoes = chamadoDTO.getObservacoes();
+		this.tecnico = chamadoDTO.getTecnico();
+		this.cliente = chamadoDTO.getCliente();
 	}
 
 	public Integer getId() {

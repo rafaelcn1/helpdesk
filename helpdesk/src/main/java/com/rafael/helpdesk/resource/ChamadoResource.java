@@ -1,5 +1,6 @@
 package com.rafael.helpdesk.resource;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rafael.helpdesk.domain.model.Chamado;
 import com.rafael.helpdesk.dtos.ChamadoDTO;
@@ -36,4 +40,15 @@ public class ChamadoResource {
 		return ResponseEntity.ok().body(findAllChamadoDTO);
 	}
 
+	@PostMapping
+	public ResponseEntity<ChamadoDTO> create(@RequestBody ChamadoDTO chamadoDTO) {
+		chamadoDTO.setId(null);
+		Chamado novoChamado = chamadoService.create(chamadoDTO);
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoChamado.getId())
+				.toUri();
+
+		return ResponseEntity.created(uri).build();
+
+	}
 }
