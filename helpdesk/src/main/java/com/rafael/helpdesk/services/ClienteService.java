@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rafael.helpdesk.domain.model.Cliente;
+import com.rafael.helpdesk.dtos.ClienteDTO;
 import com.rafael.helpdesk.repositories.ClienteRepository;
 import com.rafael.helpdesk.services.execptions.ObjectNotFoundException;
 
@@ -25,6 +26,12 @@ public class ClienteService {
 
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
+	}
+
+	public Cliente create(ClienteDTO clienteDTO) {
+		clienteDTO.setId(null);
+		Cliente novoCliente = new Cliente(clienteDTO);
+		return clienteRepository.save(novoCliente);
 	}
 
 }

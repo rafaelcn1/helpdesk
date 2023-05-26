@@ -31,6 +31,7 @@ public class ClienteDTO implements Serializable {
 
 	public ClienteDTO() {
 		super();
+		addPerfis(Perfil.CLIENTE);
 	}
 
 	public ClienteDTO(Cliente cliente) {
