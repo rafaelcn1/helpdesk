@@ -1,5 +1,6 @@
 package com.rafael.helpdesk.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class ClienteService {
 		Optional<Cliente> cliente = clienteRepository.findById(id);
 		return cliente.orElseThrow(() -> new ObjectNotFoundException("Objeto do ID: " + id + " - Não encontrado!"));
 
+	}
+
+	public List<Cliente> findAll() {
+		return clienteRepository.findAll();
 	}
 
 }
