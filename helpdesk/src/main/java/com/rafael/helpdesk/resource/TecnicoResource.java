@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -91,6 +92,13 @@ public class TecnicoResource {
 		 */
 		return ResponseEntity.created(uri).build();
 
+	}
+	
+	@PutMapping(value = "/{id}") // Utilizada para atualizar recursos existentes, permitindo a modificação de dados no servidor através de requisições PUT
+	public ResponseEntity<TecnicoDTO> update (@PathVariable Integer id, @Valid @RequestBody TecnicoDTO tecnicoDTO){ // o ID vem da url, o @Valid é a validação do TecnicoDTO que vem no corpo da requisição (@RequestBody)
+		Tecnico tecnicoAtualizado = tecnicoService.update(id, tecnicoDTO); //Chamando  metodo update 
+		return ResponseEntity.ok().body(new TecnicoDTO(tecnicoAtualizado)); //Retornando no corpo um novo TecnicoDTO, passando o TecnicoAtualizado como parametro
+		
 	}
 
 }
