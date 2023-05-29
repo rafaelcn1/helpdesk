@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rafael.helpdesk.domain.enums.Perfil;
 import com.rafael.helpdesk.domain.model.Cliente;
 
+import jakarta.validation.constraints.NotNull;
+
 public class ClienteDTO implements Serializable {
 
 	/*
@@ -20,9 +22,13 @@ public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	protected Integer id;
+	@NotNull(message = "Campo NOME é requerido!")
 	protected String nome;
+	@NotNull(message = "Campo CPF é requerido!")
 	protected String cpf;
+	@NotNull(message = "Campo EMAIL é requerido!")
 	protected String email;
+	@NotNull(message = "Campo SENHA é requerido!")
 	protected String senha;
 	protected Set<Integer> perfis = new HashSet<>();
 

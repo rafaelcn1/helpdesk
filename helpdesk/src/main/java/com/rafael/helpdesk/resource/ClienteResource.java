@@ -18,6 +18,8 @@ import com.rafael.helpdesk.domain.model.Cliente;
 import com.rafael.helpdesk.dtos.ClienteDTO;
 import com.rafael.helpdesk.services.ClienteService;
 
+import jakarta.validation.Valid;
+
 @RestController // permite que métodos retornem diretamente objetos convertidos em JSON/XML
 @RequestMapping(value = "/clientes") // Mapeamento de uma URL para um método específico em uma classe de controle
 public class ClienteResource {
@@ -43,7 +45,7 @@ public class ClienteResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<ClienteDTO> create(@RequestBody ClienteDTO clienteDTO) {
+	public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteDTO clienteDTO) {
 		Cliente novoCliente = clienteService.create(clienteDTO);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoCliente.getId())

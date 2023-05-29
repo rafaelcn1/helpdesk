@@ -18,6 +18,8 @@ import com.rafael.helpdesk.domain.model.Tecnico;
 import com.rafael.helpdesk.dtos.TecnicoDTO;
 import com.rafael.helpdesk.services.TecnicoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/tecnicos") // localhost:8080/tecnicos
 public class TecnicoResource {
@@ -62,8 +64,10 @@ public class TecnicoResource {
 	 * @RequestBody receber e converter o corpo de uma solicitação HTTP em um objeto
 	 * Java, simplificando o processamento de dados enviados pelo cliente em APIs
 	 * RESTful.
+	 * 
+	 * @Valid é para informar que existe validação na classe TecnicoDTO, por exemplo a anotação @NotNull
 	 */
-	public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoDTO tecnicoDTO) {
+	public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO tecnicoDTO) {
 		Tecnico novoTecnico = tecnicoService.create(tecnicoDTO);
 
 		/*
