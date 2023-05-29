@@ -14,6 +14,8 @@ import com.rafael.helpdesk.repositories.PessoaRepository;
 import com.rafael.helpdesk.services.execptions.DataIntegrityViolationException;
 import com.rafael.helpdesk.services.execptions.ObjectNotFoundException;
 
+import jakarta.validation.Valid;
+
 @Service // permite a implementação de lógica de negócio e regras de processamento de
 			// dados
 public class ClienteService {
@@ -53,6 +55,15 @@ public class ClienteService {
 		if (cliente.isPresent() && cliente.get().getId() != clienteDTO.getId()) {
 			throw new DataIntegrityViolationException("Email Já Cadastrado!");
 		}
+
+	}
+
+	public Cliente update(Integer id, @Valid ClienteDTO clienteDTO) {
+		clienteDTO.setId(id);
+		Cliente clienteAntigo = findById(id);
+		validarCpfEEmail(clienteDTO);
+		clienteAntigo = new Cliente(clienteDTO);
+		return clienteRepository.save(clienteAntigo);
 
 	}
 
