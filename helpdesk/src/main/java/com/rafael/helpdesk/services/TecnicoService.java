@@ -74,4 +74,12 @@ public class TecnicoService {
 
 	}
 
+	public void delete(Integer id) {
+		Tecnico tecnico = findById(id);
+		if(tecnico.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("Técnico não pode ser deletado, existe chamado em seu nome!");
+		}
+		tecnicoRepository.deleteById(id);
+	}
+
 }
