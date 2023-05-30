@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.rafael.helpdesk.domain.model.Chamado;
 import com.rafael.helpdesk.dtos.ChamadoDTO;
 import com.rafael.helpdesk.repositories.ChamadoRepository;
+import com.rafael.helpdesk.services.execptions.DataIntegrityViolationException;
 import com.rafael.helpdesk.services.execptions.ObjectNotFoundException;
 
 @Service
@@ -39,6 +40,16 @@ public class ChamadoService {
 		Chamado chamadoAntigo = findById(id);
 		chamadoAntigo = new Chamado(chamadoDTO);
 		return chamadoRepository.save(chamadoAntigo);
+	}
+
+	public void delete(Integer id) {
+		Chamado chamado = findById(id);
+		if (chamado.getStatus().getCodigo() != 0) {
+			throw new DataIntegrityViolationException(
+					"Chamado não pode ser excluido, pois está em andamento ou fechado!");
+		}
+		chamadoRepository.deleteById(id);
+
 	}
 
 }
