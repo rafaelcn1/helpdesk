@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,12 @@ public class ClienteResource {
 	public ResponseEntity<ClienteDTO> update(@PathVariable Integer id, @Valid @RequestBody ClienteDTO clienteDTO){
 		Cliente clienteAtualizado = clienteService.update(id, clienteDTO);
 		return ResponseEntity.ok().body(new ClienteDTO(clienteAtualizado));
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<ClienteDTO> delete(@PathVariable Integer id) {
+		clienteService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

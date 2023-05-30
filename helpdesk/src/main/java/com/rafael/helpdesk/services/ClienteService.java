@@ -67,4 +67,12 @@ public class ClienteService {
 
 	}
 
+	public void delete(Integer id) {
+		Cliente cliente = findById(id);
+		if (cliente.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("Cliente não pode ser excluido, existe chamado em seu nome!");
+		}
+		clienteRepository.deleteById(id);
+	}
+
 }
