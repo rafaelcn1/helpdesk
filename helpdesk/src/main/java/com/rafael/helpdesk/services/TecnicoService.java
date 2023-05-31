@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rafael.helpdesk.domain.model.Pessoa;
@@ -28,6 +29,9 @@ public class TecnicoService {
 
 	@Autowired
 	PessoaRepository pessoaRepository;
+	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 
 	public Tecnico findById(Integer id) {
 		Optional<Tecnico> findById = tecnicoRepository.findById(id);
@@ -42,6 +46,8 @@ public class TecnicoService {
 		tecnicoDTO.setId(null); // Por questão de segurança, o id sempre vai vir nulo, senao irar atualizar o
 								// que já existe
 
+		// Setando a senha do técnico cryptografada
+		tecnicoDTO.setSenha(passwordEncoder.encode(tecnicoDTO.getSenha()));
 		validarCpfEEmail(tecnicoDTO);
 
 		Tecnico novoTecnico = new Tecnico(tecnicoDTO);
