@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,13 +62,15 @@ public class TecnicoResource {
 
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping
 	/*
 	 * @RequestBody receber e converter o corpo de uma solicitação HTTP em um objeto
 	 * Java, simplificando o processamento de dados enviados pelo cliente em APIs
 	 * RESTful.
 	 * 
-	 * @Valid é para informar que existe validação na classe TecnicoDTO, por exemplo a anotação @NotNull
+	 * @Valid é para informar que existe validação na classe TecnicoDTO, por exemplo
+	 * a anotação @NotNull
 	 */
 	public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO tecnicoDTO) {
 		Tecnico novoTecnico = tecnicoService.create(tecnicoDTO);
@@ -82,7 +85,8 @@ public class TecnicoResource {
 		 * links corretos de recursos criados recentemente em APIs RESTful. Isso permite
 		 * que os usuários acessem facilmente os recursos criados.
 		 */
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoTecnico.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoTecnico.getId())
+				.toUri();
 
 		/*
 		 * Retorna uma resposta HTTP com o status 201 (Created) e inclui a URI fornecida
@@ -94,16 +98,39 @@ public class TecnicoResource {
 		return ResponseEntity.created(uri).build();
 
 	}
-	
-	@PutMapping(value = "/{id}") // Utilizada para atualizar recursos existentes, permitindo a modificação de dados no servidor através de requisições PUT
-	public ResponseEntity<TecnicoDTO> update (@PathVariable Integer id, @Valid @RequestBody TecnicoDTO tecnicoDTO){ // o ID vem da url, o @Valid é a validação do TecnicoDTO que vem no corpo da requisição (@RequestBody)
-		Tecnico tecnicoAtualizado = tecnicoService.update(id, tecnicoDTO); //Chamando  metodo update 
-		return ResponseEntity.ok().body(new TecnicoDTO(tecnicoAtualizado)); //Retornando no corpo um novo TecnicoDTO, passando o TecnicoAtualizado como parametro
-		
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PutMapping(value = "/{id}") // Utilizada para atualizar recursos existentes, permitindo a modificação de
+									// dados no servidor através de requisições PUT
+	public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id, @Valid @RequestBody TecnicoDTO tecnicoDTO) { // o
+																													// ID
+																													// vem
+																													// da
+																													// url,
+																													// o
+																													// @Valid
+																													// é
+																													// a
+																													// validação
+																													// do
+																													// TecnicoDTO
+																													// que
+																													// vem
+																													// no
+																													// corpo
+																													// da
+																													// requisição
+																													// (@RequestBody)
+		Tecnico tecnicoAtualizado = tecnicoService.update(id, tecnicoDTO); // Chamando metodo update
+		return ResponseEntity.ok().body(new TecnicoDTO(tecnicoAtualizado)); // Retornando no corpo um novo TecnicoDTO,
+																			// passando o TecnicoAtualizado como
+																			// parametro
+
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<TecnicoDTO> delete(@PathVariable Integer id){
+	public ResponseEntity<TecnicoDTO> delete(@PathVariable Integer id) {
 		tecnicoService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
